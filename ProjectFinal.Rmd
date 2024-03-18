@@ -1,0 +1,66 @@
+---
+title: "Project update"
+author: "Speedy Laster"
+date: "2024-02-24"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Excel 
+
+```{r}
+library(dplyr)
+library('readxl')
+
+my_data = read_excel('2023MLBPythag.xlsx')
+
+View(my_data)
+
+PreASG = my_data$PreASGORunP
+PostASG = my_data$PostASGORunP
+ 
+lm.orp = lm(PostASG ~ PreASG, data = my_data)
+
+summary(lm.orp)
+
+library(ggplot2)
+library(ggrepel)
+
+ggplot(data = my_data, aes(x = PreASG, y = PostASG)) + 
+  geom_point() + 
+  geom_smooth(method = 'lm', se = TRUE, color = 'red') + 
+  geom_text_repel(aes(label = Team), color = 'blue') + 
+  ggtitle('Is win % in one-run games skill or luck?') + 
+  labs(subtitle = "Does first-half win % accurately predict win % in the second half of the season?") +
+  theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5, face = "italic"))
+
+
+
+```
+Test
+
+```{r}
+PreASG = my_data$PreASGORunP
+PostASG = my_data$PostASGORunP
+ 
+lm.bpdef = lm(ORunP ~ bERA + DefEff, data = my_data)
+
+summary(lm.bpdef)
+
+library(ggplot2)
+library(ggrepel)
+
+ggplot(data = my_data, aes(x = bERA + DefEff, y = ORunP)) + 
+  geom_point() + 
+  geom_smooth(method = 'lm', se = TRUE, color = 'red') + 
+  geom_text_repel(aes(label = Team), color = 'blue') + 
+  ggtitle('Is win % in one-run games skill or luck?') + 
+  labs(subtitle = "Do bullpen ERA and defensive efficiency accurately predict win % in one run games?") +
+  theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5, face = "italic"))
+
+
+```
+
